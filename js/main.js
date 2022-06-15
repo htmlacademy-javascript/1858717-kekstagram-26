@@ -1,6 +1,3 @@
-import {getPhotoCards} from './data.js';
+import './visual-of-minis.js';
 
-const photoCards = getPhotoCards();
 
-//чтоб ESLINT не ругался
-photoCards.join();
