@@ -11,7 +11,4 @@ const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements
 
 const getUniqueElement = (elements) =>  elements.splice(getRandomNumber(0, elements.length-1), 1).join();
 
-//чтоб ESLINT не ругался
-checkStringLength('Привет', 10);
-
-export {getRandomArrayElement, getUniqueElement, getRandomNumber};
+export {getRandomArrayElement, getUniqueElement, getRandomNumber, checkStringLength};

@@ -1,6 +1,4 @@
+import {showUsersPictures} from './visual-of-minis.js';
 import {getPhotoCards} from './data.js';
 
-const photoCards = getPhotoCards();
-
-//чтоб ESLINT не ругался
-photoCards.join();
+showUsersPictures(getPhotoCards());
