@@ -15,5 +15,5 @@ const showUsersPictures = (usersPictures) => {
   usersPicturesContainer.append(similarListFragment);
 };
 
-export {showUsersPictures};
+export { showUsersPictures };
 

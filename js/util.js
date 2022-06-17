@@ -11,4 +11,12 @@ const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements
 
 const getUniqueElement = (elements) =>  elements.splice(getRandomNumber(0, elements.length-1), 1).join();
 
-export {getRandomArrayElement, getUniqueElement, getRandomNumber, checkStringLength};
+const createElement = (tagName, className) => {
+  const element = document.createElement(tagName);
+  if (className) {
+    element.classList.add(className);
+  }
+  return element;
+};
+
+export { getRandomArrayElement, getUniqueElement, getRandomNumber, checkStringLength, createElement };
