@@ -1,4 +1,4 @@
-import {getRandomArrayElement, getUniqueElement, getRandomNumber} from './util.js';
+import { getRandomArrayElement, getUniqueElement, getRandomNumber } from './util.js';
 
 const MAX_COMMENT_COUNT = 4;
 const PHOTO_CARDS_COUNT = 25;
@@ -57,4 +57,4 @@ const createPhotoCards = () => ({
 
 const getPhotoCards = () => Array.from({length: PHOTO_CARDS_COUNT}, createPhotoCards);
 
-export {getPhotoCards};
+export { getPhotoCards };
