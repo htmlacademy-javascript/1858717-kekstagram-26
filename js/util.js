@@ -19,4 +19,16 @@ const createElement = (tagName, className) => {
   return element;
 };
 
-export { getRandomArrayElement, getUniqueElement, getRandomNumber, checkStringLength, createElement };
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const isDuplicateInArray = (elements) => new Set(elements).size !== elements.length;
+
+export {
+  getRandomArrayElement,
+  getUniqueElement,
+  getRandomNumber,
+  checkStringLength,
+  createElement,
+  isEscapeKey,
+  isDuplicateInArray
+};
