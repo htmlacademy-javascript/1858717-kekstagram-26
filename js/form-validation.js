@@ -51,7 +51,7 @@ const onEditFormSubmit = (evt) => {
   } else {
     //как-то показать ошибку
   }
-}
+};
 
 const openEditForm = () => {
   if (imageUploadField.value) {
@@ -86,6 +86,3 @@ imageUploadField.addEventListener('change', openEditForm);
     submitButton.disabled = false;
   }
 }); */
-
-
-
