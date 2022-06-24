@@ -18,6 +18,8 @@ const onEditFormEscapeKeydown = (evt) => {
   }
 };
 
+const onFieldFocusKeydown =  (evt) => {evt.stopPropagation();};
+
 const isValidHashtag = () => {
   if (!hashtagField.value) {
     return true;
@@ -43,13 +45,14 @@ const isValidHashtag = () => {
 const onEditFormSubmit = (evt) => {
   evt.preventDefault();
   const pristine = new Pristine(uploadPhotoForm);
+  pristine.addValidator(hashtagField, isValidHashtag, 'Error');
   const isValid = pristine.validate();
 
-  if (isValid && isValidHashtag()) {
+  if (isValid) {
     uploadPhotoForm.submit();
     closeEditForm();
   } else {
-    //как-то показать ошибку
+    pristine.getErrors();
   }
 };
 
@@ -61,6 +64,8 @@ const openEditForm = () => {
     cancelUploadButton.addEventListener('click', closeEditForm);
     document.addEventListener('keydown', onEditFormEscapeKeydown);
     uploadPhotoForm.addEventListener('submit', onEditFormSubmit);
+    hashtagField.addEventListener('keydown', onFieldFocusKeydown);
+    descriptionField.addEventListener('keydown', onFieldFocusKeydown);
   }
 };
 
@@ -75,14 +80,13 @@ function closeEditForm () {
   cancelUploadButton.removeEventListener('click', closeEditForm);
   document.removeEventListener('keydown', onEditFormEscapeKeydown);
   uploadPhotoForm.removeEventListener('submit', onEditFormSubmit);
+  hashtagField.removeEventListener('keydown', onFieldFocusKeydown);
+  descriptionField.removeEventListener('keydown', onFieldFocusKeydown);
 }
 
-imageUploadField.addEventListener('change', openEditForm);
+const validateAndSubmitForm = () => {
+  imageUploadField.addEventListener('change', openEditForm);
+};
 
-/*hashtagField.addEventListener('input', () => {
-  if (!isValidHashtag()) {
-    submitButton.disabled = true;
-  } else {
-    submitButton.disabled = false;
-  }
-}); */
+export { validateAndSubmitForm };
+
