@@ -20,6 +20,7 @@ const onEditFormEscapeKeydown = (evt) => {
 
 const onFieldFocusKeydown =  (evt) => {evt.stopPropagation();};
 
+let errorMessage;
 const isValidHashtag = () => {
   if (!hashtagField.value) {
     return true;
@@ -27,6 +28,7 @@ const isValidHashtag = () => {
   const hashTags = hashtagField.value.split(' ');
 
   if (hashTags.length > 5) {
+    errorMessage = 'Не более пяти #ХешТэгов';
     return false;
   }
 
@@ -34,9 +36,10 @@ const isValidHashtag = () => {
   const isDuplicateHashtag = isDuplicateInArray(hashtagsInLowerCase);
 
   if (isDuplicateHashtag) {
+    errorMessage = 'Не повторяйтесь!';
     return false;
   }
-
+  errorMessage = 'Некорректно введен #ХешТэг';
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
   return hashTags.every((hashTag) => re.test(hashTag));
@@ -44,8 +47,13 @@ const isValidHashtag = () => {
 
 const onEditFormSubmit = (evt) => {
   evt.preventDefault();
-  const pristine = new Pristine(uploadPhotoForm);
-  pristine.addValidator(hashtagField, isValidHashtag, 'Error');
+
+  const defaultConfig = {
+    classTo: 'img-upload__field-wrapper',
+    errorTextParent: 'img-upload__field-wrapper'
+  };
+  const pristine = new Pristine(uploadPhotoForm, defaultConfig);
+  pristine.addValidator(hashtagField, isValidHashtag, errorMessage);
   const isValid = pristine.validate();
 
   if (isValid) {
