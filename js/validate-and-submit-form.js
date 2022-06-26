@@ -20,7 +20,6 @@ const onEditFormEscapeKeydown = (evt) => {
 
 const onFieldFocusKeydown =  (evt) => {evt.stopPropagation();};
 
-let errorMessage;
 const isValidHashtag = () => {
   if (!hashtagField.value) {
     return true;
@@ -28,7 +27,6 @@ const isValidHashtag = () => {
   const hashTags = hashtagField.value.split(' ');
 
   if (hashTags.length > 5) {
-    errorMessage = 'Не более пяти #ХешТэгов';
     return false;
   }
 
@@ -36,24 +34,33 @@ const isValidHashtag = () => {
   const isDuplicateHashtag = isDuplicateInArray(hashtagsInLowerCase);
 
   if (isDuplicateHashtag) {
-    errorMessage = 'Не повторяйтесь!';
     return false;
   }
-  errorMessage = 'Некорректно введен #ХешТэг';
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
   return hashTags.every((hashTag) => re.test(hashTag));
 };
 
+function isValidFileType () {
+  switch (this.files[0].type) {
+    case 'image/jpeg':
+    case 'image/gif':
+    case 'image/png':
+      return true;
+    default: return false;
+  }
+}
+
+const defaultConfig = {
+  classTo: 'img-upload__form',
+  errorTextParent: 'img-upload__field-wrapper'
+};
+const pristine = new Pristine(uploadPhotoForm, defaultConfig);
+pristine.addValidator(hashtagField, isValidHashtag, 'Некорректно введен #ХэшТэг');
+pristine.addValidator(imageUploadField, isValidFileType, 'Загрузите изображение');
+
 const onEditFormSubmit = (evt) => {
   evt.preventDefault();
-
-  const defaultConfig = {
-    classTo: 'img-upload__field-wrapper',
-    errorTextParent: 'img-upload__field-wrapper'
-  };
-  const pristine = new Pristine(uploadPhotoForm, defaultConfig);
-  pristine.addValidator(hashtagField, isValidHashtag, errorMessage);
   const isValid = pristine.validate();
 
   if (isValid) {
@@ -64,11 +71,10 @@ const onEditFormSubmit = (evt) => {
   }
 };
 
-const openEditForm = () => {
+const openEditForm = function() {
   if (imageUploadField.value) {
     editForm.classList.remove('hidden');
     body.classList.add('modal-open');
-
     cancelUploadButton.addEventListener('click', closeEditForm);
     document.addEventListener('keydown', onEditFormEscapeKeydown);
     uploadPhotoForm.addEventListener('submit', onEditFormSubmit);
