@@ -1,4 +1,5 @@
 import { createElement } from './util.js';
+import { closeBigPicture } from './full-picture-close.js';
 
 const showBigPicture = (usersPictures) => {
   const miniPictures = document.querySelectorAll('.picture');
@@ -44,6 +45,7 @@ const showBigPicture = (usersPictures) => {
       bigPicture.querySelector('.social__comment-count').classList.add('hidden');
       bigPicture.querySelector('.comments-loader').classList.add('hidden');
       body.classList.add('modal-open');
+      closeBigPicture();
     });
   }
 };
