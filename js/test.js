@@ -38,6 +38,27 @@ const showUserComments = (currentElement, counter) => {
   bigPictureData.socialComments.append(similarListFragment);
 };
 
+const showAllComments = (count, currentElement) => {
+  count = currentElement.comments.length;
+  bigPictureData.shownComments.textContent = currentElement.comments.length;
+  bigPictureData.commentsLoaderButton.classList.add('hidden');
+  bigPictureData.commentsLoaderButton.removeEventListener('click', onCommentsLoaderButtonClick(count, currentElement));
+  showUserComments(currentElement, count);
+};
+
+function onCommentsLoaderButtonClick (count, currentElement) {
+  return () => {
+    if ((count + SHOWN_COMMENTS_COUNT_STEP) >= currentElement.comments.length){
+      showAllComments(count, currentElement);
+    } else {
+      bigPictureData.commentsLoaderButton.classList.remove('hidden');
+      count = count + SHOWN_COMMENTS_COUNT_STEP;
+      bigPictureData.shownComments.textContent = count;
+      showUserComments(currentElement, count);
+    }
+  };
+}
+
 const closeBigPicture = (eventHandler) => {
   bigPictureData.closeButton = document.querySelector('.big-picture__cancel');
 
@@ -81,41 +102,22 @@ const showAndCloseFullPicture = (usersPictures) => {
       bigPictureData.likesCount.textContent = currentUserPicture.likes;
       bigPictureData.commentsCount.textContent = currentUserPicture.comments.length;
 
-      let commentsToShowCount = SHOWN_COMMENTS_COUNT_STEP;
+      const commentsToShowCount = SHOWN_COMMENTS_COUNT_STEP;
       bigPictureData.shownComments.textContent = SHOWN_COMMENTS_COUNT_STEP;
 
-      const showAllComments = () => {
-        commentsToShowCount = currentUserPicture.comments.length;
-        bigPictureData.shownComments.textContent = currentUserPicture.comments.length;
-        bigPictureData.commentsLoaderButton.classList.add('hidden');
-        bigPictureData.commentsLoaderButton.removeEventListener('click', onCommentsLoaderButtonClick);
-        showUserComments(currentUserPicture, commentsToShowCount);
-      };
-
       if (commentsToShowCount >= currentUserPicture.comments.length) {
-        showAllComments();
+        showAllComments(commentsToShowCount, currentUserPicture);
       } else {
         bigPictureData.commentsLoaderButton.classList.remove('hidden');
-        bigPictureData.commentsLoaderButton.addEventListener('click', onCommentsLoaderButtonClick);
+        bigPictureData.commentsLoaderButton.addEventListener('click', onCommentsLoaderButtonClick(commentsToShowCount, currentUserPicture));
         showUserComments(currentUserPicture, commentsToShowCount);
-      }
-
-      function onCommentsLoaderButtonClick () {
-        if ((commentsToShowCount + SHOWN_COMMENTS_COUNT_STEP) >= currentUserPicture.comments.length){
-          showAllComments();
-        } else {
-          bigPictureData.commentsLoaderButton.classList.remove('hidden');
-          commentsToShowCount = commentsToShowCount + SHOWN_COMMENTS_COUNT_STEP;
-          bigPictureData.shownComments.textContent = commentsToShowCount;
-          showUserComments(currentUserPicture, commentsToShowCount);
-        }
       }
 
       bigPictureData.pictureDescription.textContent = currentUserPicture.description;
       bigPictureData.bigPicture.classList.remove('hidden');
 
       bigPictureData.body.classList.add('modal-open');
-      closeBigPicture(bigPictureData.bigPicture, onCommentsLoaderButtonClick);
+      closeBigPicture(onCommentsLoaderButtonClick);
     });
   }
 };
