@@ -1,4 +1,6 @@
 import { isEscapeKey, isDuplicateInArray } from './util.js';
+import { editImageScale, removeScaleButtonsListeners } from './scale-editing.js';
+import { createEffectSlider, destroyEffectSlider } from './effects-setting.js';
 
 const body = document.querySelector('body');
 const uploadPhotoForm = document.querySelector('.img-upload__form');
@@ -77,6 +79,9 @@ const openEditForm = () => {
   if (formFields.imageUpload.value && isValidFileType(formFields.imageUpload.files[0].type)) {
     imgUploadOverlay.classList.remove('hidden');
     body.classList.add('modal-open');
+
+    editImageScale();
+    createEffectSlider();
     formFields.cancelUploadButton.addEventListener('click', closeEditForm);
     document.addEventListener('keydown', onEditFormEscapeKeydown);
     uploadPhotoForm.addEventListener('submit', onEditFormSubmit);
@@ -94,9 +99,9 @@ function closeEditForm () {
   formFields.scaleValue.value = '100%';
   formFields.originalEffect.checked = true;
 
-  const pristineErrorText = uploadPhotoForm.querySelector('.text-help');
-  pristineErrorText.style.display = 'none';
-
+  pristine.reset();
+  removeScaleButtonsListeners();
+  destroyEffectSlider();
   formFields.cancelUploadButton.removeEventListener('click', closeEditForm);
   document.removeEventListener('keydown', onEditFormEscapeKeydown);
   uploadPhotoForm.removeEventListener('submit', onEditFormSubmit);
