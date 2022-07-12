@@ -1,5 +1,5 @@
 const effectsRadioButtons = document.querySelectorAll('.effects__radio');
-const previewImage = document.querySelector('.img-upload__preview');
+const previewImage = document.querySelector('.img-upload__preview img');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
 const effectLevelValueField = document.querySelector('.effect-level__value');
 
@@ -111,6 +111,9 @@ const createEffectSlider = () => {
 };
 
 const destroyEffectSlider = () => {
+  previewImage.removeAttribute('style');
+  previewImage.removeAttribute('class');
+  customEffect = DEFAULT_EFFECT;
   effectLevelSlider.noUiSlider.destroy();
 };
 
