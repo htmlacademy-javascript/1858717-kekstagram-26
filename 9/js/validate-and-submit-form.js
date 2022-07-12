@@ -1,5 +1,5 @@
 import { isEscapeKey, isDuplicateInArray } from './util.js';
-import { editImageScale, removeScaleButtonsListeners } from './scale-editing.js';
+import { editImageScale, destroyScaleControl } from './scale-editing.js';
 import { createEffectSlider, destroyEffectSlider } from './effects-setting.js';
 
 const body = document.querySelector('body');
@@ -100,7 +100,7 @@ function closeEditForm () {
   formFields.originalEffect.checked = true;
 
   pristine.reset();
-  removeScaleButtonsListeners();
+  destroyScaleControl();
   destroyEffectSlider();
   formFields.cancelUploadButton.removeEventListener('click', closeEditForm);
   document.removeEventListener('keydown', onEditFormEscapeKeydown);

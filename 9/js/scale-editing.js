@@ -39,9 +39,10 @@ const editImageScale = () => {
   biggerScaleButton.addEventListener('click', enlargeImage);
 };
 
-const removeScaleButtonsListeners = () => {
+const destroyScaleControl = () => {
+  userImage.style.transform = 'scale(1)';
   smallerScaleButton.removeEventListener('click', reduceImage);
   biggerScaleButton.removeEventListener('click', enlargeImage);
 };
 
-export { editImageScale, removeScaleButtonsListeners };
+export { editImageScale, destroyScaleControl };
