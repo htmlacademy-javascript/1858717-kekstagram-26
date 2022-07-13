@@ -40,6 +40,8 @@ const editImageScale = () => {
 };
 
 const destroyScaleControl = () => {
+  scaleNumber = MAX_SCALE_VALUE;
+  scaleControlValue.value = '100%';
   userImage.style.transform = 'scale(1)';
   smallerScaleButton.removeEventListener('click', reduceImage);
   biggerScaleButton.removeEventListener('click', enlargeImage);

@@ -63,7 +63,7 @@ const START_SLIDER_OPTIONS = {
 const onNoneEffectRadioClick = () => {
   effectLevelSlider.setAttribute('disabled', true);
   effectLevelSlider.classList.add('hidden');
-  previewImage.removeAttribute('style');
+  previewImage.style.filter = '';
 };
 
 const createEffectSlider = () => {

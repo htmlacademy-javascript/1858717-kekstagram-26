@@ -10,7 +10,6 @@ const formFields = {
   imageUpload: null,
   hashtag: null,
   description: null,
-  scaleValue: null,
   originalEffect: null,
   cancelUploadButton: null,
 };
@@ -96,7 +95,6 @@ function closeEditForm () {
   formFields.imageUpload.value = '';
   formFields.hashtag.value = '';
   formFields.description.value = '';
-  formFields.scaleValue.value = '100%';
   formFields.originalEffect.checked = true;
 
   pristine.reset();
@@ -113,7 +111,6 @@ const validateAndSubmitForm = () => {
   formFields.imageUpload = uploadPhotoForm.querySelector('#upload-file');
   formFields.hashtag = uploadPhotoForm.querySelector('.text__hashtags');
   formFields.description = uploadPhotoForm.querySelector('.text__description');
-  formFields.scaleValue = uploadPhotoForm.querySelector('.scale__control--value');
 
   formFields.originalEffect = uploadPhotoForm.querySelector('#effect-none');
   formFields.cancelUploadButton = uploadPhotoForm.querySelector('.img-upload__cancel');
