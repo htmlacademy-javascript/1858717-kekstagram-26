@@ -1,4 +1,6 @@
 import { isEscapeKey, isDuplicateInArray } from './util.js';
+import { editImageScale, destroyScaleControl } from './scale-editing.js';
+import { createEffectSlider, destroyEffectSlider } from './effects-setting.js';
 
 const body = document.querySelector('body');
 const uploadPhotoForm = document.querySelector('.img-upload__form');
@@ -8,7 +10,6 @@ const formFields = {
   imageUpload: null,
   hashtag: null,
   description: null,
-  scaleValue: null,
   originalEffect: null,
   cancelUploadButton: null,
 };
@@ -77,6 +78,9 @@ const openEditForm = () => {
   if (formFields.imageUpload.value && isValidFileType(formFields.imageUpload.files[0].type)) {
     imgUploadOverlay.classList.remove('hidden');
     body.classList.add('modal-open');
+
+    editImageScale();
+    createEffectSlider();
     formFields.cancelUploadButton.addEventListener('click', closeEditForm);
     document.addEventListener('keydown', onEditFormEscapeKeydown);
     uploadPhotoForm.addEventListener('submit', onEditFormSubmit);
@@ -91,12 +95,11 @@ function closeEditForm () {
   formFields.imageUpload.value = '';
   formFields.hashtag.value = '';
   formFields.description.value = '';
-  formFields.scaleValue.value = '100%';
   formFields.originalEffect.checked = true;
 
-  const pristineErrorText = uploadPhotoForm.querySelector('.text-help');
-  pristineErrorText.style.display = 'none';
-
+  pristine.reset();
+  destroyScaleControl();
+  destroyEffectSlider();
   formFields.cancelUploadButton.removeEventListener('click', closeEditForm);
   document.removeEventListener('keydown', onEditFormEscapeKeydown);
   uploadPhotoForm.removeEventListener('submit', onEditFormSubmit);
@@ -108,7 +111,6 @@ const validateAndSubmitForm = () => {
   formFields.imageUpload = uploadPhotoForm.querySelector('#upload-file');
   formFields.hashtag = uploadPhotoForm.querySelector('.text__hashtags');
   formFields.description = uploadPhotoForm.querySelector('.text__description');
-  formFields.scaleValue = uploadPhotoForm.querySelector('.scale__control--value');
 
   formFields.originalEffect = uploadPhotoForm.querySelector('#effect-none');
   formFields.cancelUploadButton = uploadPhotoForm.querySelector('.img-upload__cancel');

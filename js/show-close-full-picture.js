@@ -120,6 +120,7 @@ const showAndCloseFullPicture = (usersPictures) => {
       bigPictureData.bigPicture.classList.remove('hidden');
 
       bigPictureData.body.classList.add('modal-open');
+
       closeBigPicture();
     });
   }
