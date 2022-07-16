@@ -23,6 +23,34 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const isDuplicateInArray = (elements) => new Set(elements).size !== elements.length;
 
+const isErrorMessageShown = () => {
+  const errorMessage = document.querySelector('.error');
+  return errorMessage !== null;
+};
+
+const isSuccessMessageShown = () => {
+  const successMessage = document.querySelector('.success');
+  return successMessage !== null;
+};
+
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.color = 'red';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'white';
+
+  alertContainer.textContent = message;
+  document.body.append(alertContainer);
+};
+
 export {
   getRandomArrayElement,
   getUniqueElement,
@@ -30,5 +58,8 @@ export {
   checkStringLength,
   createElement,
   isEscapeKey,
-  isDuplicateInArray
+  isDuplicateInArray,
+  isErrorMessageShown,
+  isSuccessMessageShown,
+  showAlert
 };

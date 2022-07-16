@@ -1,10 +1,14 @@
-import { isEscapeKey, isDuplicateInArray } from './util.js';
+import { isEscapeKey, isDuplicateInArray, isErrorMessageShown } from './util.js';
 import { editImageScale, destroyScaleControl } from './scale-editing.js';
 import { createEffectSlider, destroyEffectSlider } from './effects-setting.js';
+import { showErrorMessage } from './show-and-close-error.js';
+import { showSuccessMessage } from './show-and-close-success.js';
+import { sendData } from './api.js';
 
 const body = document.querySelector('body');
 const uploadPhotoForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay  = uploadPhotoForm.querySelector('.img-upload__overlay');
+const submitButton = uploadPhotoForm.querySelector('.img-upload__submit');
 
 const formFields = {
   imageUpload: null,
@@ -57,9 +61,21 @@ const pristine = new Pristine(uploadPhotoForm, defaultConfig);
 
 const onEditFormEscapeKeydown = (evt) => {
   if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeEditForm();
+    if (!isErrorMessageShown()){
+      evt.preventDefault();
+      closeEditForm();
+    }
   }
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'В процессе...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
 };
 
 const onEditFormSubmit = (evt) => {
@@ -67,10 +83,19 @@ const onEditFormSubmit = (evt) => {
   const isValid = pristine.validate();
 
   if (isValid) {
-    uploadPhotoForm.submit();
-    closeEditForm();
-  } else {
-    pristine.getErrors();
+    blockSubmitButton();
+    sendData(
+      () => {
+        closeEditForm();
+        showSuccessMessage();
+        unblockSubmitButton();
+      },
+      () => {
+        showErrorMessage();
+        unblockSubmitButton();
+      },
+      new FormData(evt.target)
+    );
   }
 };
 
