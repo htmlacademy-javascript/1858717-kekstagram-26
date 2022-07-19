@@ -2,7 +2,7 @@ const getData = (onSuccess, onFail) => {
   fetch('https://26.javascript.pages.academy/kekstagram/data')
     .then((response) => {
       if (response.ok) {
-        response.json();
+        return response.json();
       } else {
         onFail('Не удалось загрузить изображения. Обновите страницу.');
       }
