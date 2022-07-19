@@ -3,8 +3,6 @@ const showUsersPictures = (usersPictures) => {
   const picturesTemplate = document.querySelector('#picture').content.querySelector('.picture');
   const similarListFragment = document.createDocumentFragment();
 
-  usersPicturesContainer.querySelector('.pictures__title').classList.remove('visually-hidden');
-
   usersPictures.forEach(({url, likes, comments}) => {
     const pictureElement = picturesTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = url;
