@@ -46,7 +46,7 @@ const filterUserPictures = (cb, data, showFullPicture) => {
   sortFiltersContainer.classList.remove('img-filters--inactive');
 
   filterButtons.forEach((filterButton) => {
-    filterButton.addEventListener('click', () => {
+    filterButton.addEventListener('click', debounce(() => {
       filterButtons.forEach((button) => {
         button.classList.remove('img-filters__button--active');
       });
@@ -54,20 +54,18 @@ const filterUserPictures = (cb, data, showFullPicture) => {
 
       switch (filterButton.id) {
         case 'filter-random':
-          debounce(filterPicturesRandom(cb, data, showFullPicture));
+          filterPicturesRandom(cb, data, showFullPicture);
           break;
         case 'filter-discussed':
-          debounce(filterPicturesByDiscussed(cb, data, showFullPicture));
+          filterPicturesByDiscussed(cb, data, showFullPicture);
           break;
         default:
-          debounce (() => {
-            clearPicturesContainer();
-            cb(data);
-            showFullPicture(data);
-          });
+          clearPicturesContainer();
+          cb(data);
+          showFullPicture(data);
           break;
       }
-    });
+    }));
   });
 };
 
