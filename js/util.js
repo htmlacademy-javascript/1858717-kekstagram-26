@@ -9,7 +9,7 @@ const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
-const getUniqueElement = (elements) =>  elements.splice(getRandomNumber(0, elements.length-1), 1).join();
+const getUniqueElement = (elements) =>  elements.splice(getRandomNumber(0, elements.length-1), 1);
 
 const createElement = (tagName, className) => {
   const element = document.createElement(tagName);
@@ -51,6 +51,15 @@ const showAlert = (message) => {
   document.body.append(alertContainer);
 };
 
+const debounce = (cb, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => cb.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   getRandomArrayElement,
   getUniqueElement,
@@ -61,5 +70,6 @@ export {
   isDuplicateInArray,
   isErrorMessageShown,
   isSuccessMessageShown,
-  showAlert
+  showAlert,
+  debounce
 };

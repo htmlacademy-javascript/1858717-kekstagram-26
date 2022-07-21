@@ -3,10 +3,10 @@ import { showAndCloseFullPicture } from './show-close-full-picture.js';
 import { validateAndSubmitForm } from './validate-and-submit-form.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
+import { filterUserPictures } from './filter-and-sort-pictures.js';
 
-//const usersPictures = getPhotoCards();
-//showUsersPictures(usersPictures);
-//showAndCloseFullPicture(usersPictures);
+const onSuccess = (data) => {
+  filterUserPictures(showUsersPictures, data, showAndCloseFullPicture);
+};
 validateAndSubmitForm();
-getData(showUsersPictures, showAlert);
-getData(showAndCloseFullPicture, showAlert);
+getData(onSuccess, showAlert);
