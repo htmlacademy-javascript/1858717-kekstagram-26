@@ -1,9 +1,12 @@
 import { getUniqueElement, debounce } from './util.js';
+import { showUsersPictures } from './visual-of-minis.js';
+import { showAndCloseFullPicture } from './show-close-full-picture.js';
+
+const RANDOM_PICTURES_COUNT = 10;
+const DEBOUNCE_DELAY = 500;
 
 const filterButtons = document.querySelectorAll('.img-filters__button');
 const sortFiltersContainer = document.querySelector('.img-filters');
-
-const RANDOM_PICTURES_COUNT = 10;
 
 const clearPicturesContainer = () => {
   const usersPictures = document.querySelectorAll('.picture');
@@ -18,7 +21,7 @@ const sortPicturesByComments = (pictureA, pictureB) => {
   return pictureBCommentsCount - pictureACommentsCount;
 };
 
-const filterPicturesRandom = (cb, data, showFullPicture) => {
+const filterPicturesRandom = (data) => {
   const randomData = [];
   const dataCopy = data.slice();
 
@@ -26,47 +29,49 @@ const filterPicturesRandom = (cb, data, showFullPicture) => {
     randomData.push(...getUniqueElement(dataCopy));
   }
   clearPicturesContainer();
-  cb(randomData);
-  showFullPicture(randomData);
+  showUsersPictures(randomData);
+  showAndCloseFullPicture(randomData);
 };
 
-const filterPicturesByDiscussed = (cb, data, showFullPicture) => {
+const filterPicturesByDiscussed = (data) => {
   const sortedData = data
     .slice()
     .sort(sortPicturesByComments);
 
   clearPicturesContainer();
-  cb(sortedData);
-  showFullPicture(sortedData);
+  showUsersPictures(sortedData);
+  showAndCloseFullPicture(sortedData);
 };
 
-const filterUserPictures = (cb, data, showFullPicture) => {
-  cb(data);
-  showFullPicture(data);
+const filterUsersPictures = (button, data) => {
+  filterButtons.forEach((filterButton) => {
+    filterButton.classList.remove('img-filters__button--active');
+  });
+  button.classList.add('img-filters__button--active');
+
+  switch (button.id) {
+    case 'filter-random':
+      filterPicturesRandom(data);
+      break;
+    case 'filter-discussed':
+      filterPicturesByDiscussed(data);
+      break;
+    default:
+      clearPicturesContainer();
+      showUsersPictures(data);
+      showAndCloseFullPicture(data);
+      break;
+  }
+};
+
+const initPicturesFilter = (data) => {
+  showUsersPictures(data);
+  showAndCloseFullPicture(data);
   sortFiltersContainer.classList.remove('img-filters--inactive');
+  const buttonClickHandler = debounce((evt) => {filterUsersPictures(evt.target, data);}, DEBOUNCE_DELAY);
 
   filterButtons.forEach((filterButton) => {
-    filterButton.addEventListener('click', debounce(() => {
-      filterButtons.forEach((button) => {
-        button.classList.remove('img-filters__button--active');
-      });
-      filterButton.classList.add('img-filters__button--active');
-
-      switch (filterButton.id) {
-        case 'filter-random':
-          filterPicturesRandom(cb, data, showFullPicture);
-          break;
-        case 'filter-discussed':
-          filterPicturesByDiscussed(cb, data, showFullPicture);
-          break;
-        default:
-          clearPicturesContainer();
-          cb(data);
-          showFullPicture(data);
-          break;
-      }
-    }));
+    filterButton.addEventListener('click', buttonClickHandler);
   });
 };
-
-export { filterUserPictures };
+export { initPicturesFilter };
