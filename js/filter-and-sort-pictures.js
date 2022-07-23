@@ -67,7 +67,12 @@ const filterUsersPictures = (button, data) => {
 const initPicturesFilter = (data) => {
   showUsersPictures(data);
   showAndCloseFullPicture(data);
-  sortFiltersContainer.classList.remove('img-filters--inactive');
+
+  const usersImage = document.querySelector('.picture__img');
+  usersImage.addEventListener('load', () => {
+    sortFiltersContainer.classList.remove('img-filters--inactive');
+  });
+
   const buttonClickHandler = debounce((evt) => {filterUsersPictures(evt.target, data);}, DEBOUNCE_DELAY);
 
   filterButtons.forEach((filterButton) => {
