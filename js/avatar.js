@@ -1,15 +1,9 @@
+const FILE_TYPES = ['image/jpeg', 'image/gif', 'image/png'];
+
 const fileChooser = document.querySelector('.img-upload__input');
 const preview = document.querySelector('.img-upload__preview img');
 
-const isValidFileType = (type) => {
-  switch (type) {
-    case 'image/jpeg':
-    case 'image/gif':
-    case 'image/png':
-      return true;
-    default: return false;
-  }
-};
+const isValidFileType = (type) => FILE_TYPES.includes(type);
 
 const onFileInputChange = (cb) => {
   preview.src = '';
