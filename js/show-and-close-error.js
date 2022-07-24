@@ -8,15 +8,13 @@ const errorMessage = errorMessageTemplate.cloneNode(true);
 const errorButton = errorMessage.querySelector('.error__button');
 
 const onErrorMessageEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    if (isErrorMessageShown()){
-      evt.preventDefault();
-      closeErrorMessage();
-    }
+  if (isEscapeKey(evt) && isErrorMessageShown()) {
+    evt.preventDefault();
+    closeErrorMessage();
   }
 };
 
-const outErrorMesageClick = (evt) => {
+const onOutErrorMesageClick = (evt) => {
   if (evt.target === errorMessage) {
     closeErrorMessage();
   }
@@ -24,7 +22,7 @@ const outErrorMesageClick = (evt) => {
 
 function closeErrorMessage () {
   document.removeEventListener('keydown', onErrorMessageEscKeydown);
-  document.addEventListener('click', outErrorMesageClick);
+  document.addEventListener('click', onOutErrorMesageClick);
   body.removeChild(errorMessage);
   uploadPhotoForm.classList.remove('hidden');
 }
@@ -35,7 +33,7 @@ const showErrorMessage = () => {
 
   errorButton.addEventListener('click', closeErrorMessage);
   document.addEventListener('keydown', onErrorMessageEscKeydown);
-  document.addEventListener('click', outErrorMesageClick);
+  document.addEventListener('click', onOutErrorMesageClick);
 };
 
 export { showErrorMessage };
