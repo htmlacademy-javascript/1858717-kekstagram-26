@@ -4,6 +4,7 @@ import { createEffectSlider, destroyEffectSlider } from './effects-setting.js';
 import { showErrorMessage } from './show-and-close-error.js';
 import { showSuccessMessage } from './show-and-close-success.js';
 import { sendData } from './api.js';
+import { onFileInputChange } from './avatar.js';
 
 const body = document.querySelector('body');
 const uploadPhotoForm = document.querySelector('.img-upload__form');
@@ -25,16 +26,6 @@ const defaultConfig = {
 };
 
 const onFieldFocusKeydown =  (evt) => {evt.stopPropagation();};
-
-const isValidFileType = (type) => {
-  switch (type) {
-    case 'image/jpeg':
-    case 'image/gif':
-    case 'image/png':
-      return true;
-    default: return false;
-  }
-};
 
 const isValidHashtag = () => {
   if (!formFields.hashtag.value) {
@@ -100,18 +91,16 @@ const onEditFormSubmit = (evt) => {
 };
 
 const openEditForm = () => {
-  if (formFields.imageUpload.value && isValidFileType(formFields.imageUpload.files[0].type)) {
-    imgUploadOverlay.classList.remove('hidden');
-    body.classList.add('modal-open');
+  imgUploadOverlay.classList.remove('hidden');
+  body.classList.add('modal-open');
 
-    editImageScale();
-    createEffectSlider();
-    formFields.cancelUploadButton.addEventListener('click', closeEditForm);
-    document.addEventListener('keydown', onEditFormEscapeKeydown);
-    uploadPhotoForm.addEventListener('submit', onEditFormSubmit);
-    formFields.hashtag.addEventListener('keydown', onFieldFocusKeydown);
-    formFields.description.addEventListener('keydown', onFieldFocusKeydown);
-  }
+  editImageScale();
+  createEffectSlider();
+  formFields.cancelUploadButton.addEventListener('click', closeEditForm);
+  document.addEventListener('keydown', onEditFormEscapeKeydown);
+  uploadPhotoForm.addEventListener('submit', onEditFormSubmit);
+  formFields.hashtag.addEventListener('keydown', onFieldFocusKeydown);
+  formFields.description.addEventListener('keydown', onFieldFocusKeydown);
 };
 
 function closeEditForm () {
@@ -142,7 +131,9 @@ const validateAndSubmitForm = () => {
 
   pristine.addValidator(formFields.hashtag, isValidHashtag, 'Некорректно введен #ХэшТэг');
 
-  formFields.imageUpload.addEventListener('change', openEditForm);
+  formFields.imageUpload.addEventListener('change', () => {
+    onFileInputChange(openEditForm);
+  });
 };
 
 export { validateAndSubmitForm };
